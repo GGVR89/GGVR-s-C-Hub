@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>UNITY C# FULL CHEAT SHEET (ULTIMATE PLUS)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+:root{
+    --bg: mediumpurple;
+    --bar: #3b2a4e;
+    --card: #5f4b8b;
+    --card2:#4b3b6e;
+    --accent:#9a7fde;
+    --hover:#7a63c4;
+    --text:#ffffff;
+    --muted:#e9e2ff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+    background-color: var(--bg);
+    font-family: Arial, Helvetica, sans-serif;
+    color: var(--text);
+}
+
+/* Top nav */
+.tab-bar{
+    background-color: var(--bar);
+    display:flex; gap:15px; padding:10px 14px;
+    box-shadow:0 2px 5px rgba(0,0,0,.35);
+    position:sticky; top:0; z-index:5;
+}
+.tab-bar a{
+    font-weight:700; padding:10px 18px; border-radius:6px;
+    text-decoration:none; color:var(--text);
+    transition:.2s background-color;
+}
+.tab-bar a:hover{ background-color: var(--hover); }
+.tab-bar a.active{ background-color: var(--accent); }
+
+/* Header & tools */
+.content{max-width:1100px; margin: 28px auto 60px; padding: 0 18px;}
+h1{ text-align:center; font-size:2.4rem; margin:0 0 8px; }
+.sub{ text-align:center; opacity:.9; margin-bottom:22px }
+.tools{
+    display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin:12px 0 26px;
+}
+.search{
+    flex:1 1 360px; max-width:680px; display:flex; gap:8px;
+}
+.search input{
+    width:100%; padding:12px 14px; border-radius:9px; border:none;
+    background:rgba(0,0,0,.18); color:var(--text); font-size:1rem;
+    outline:2px solid transparent;
+}
+.search input:focus{ outline-color: rgba(255,255,255,.35); }
+
+/* Buttons */
+.btn {
+    background: var(--bar); border:none; color:var(--text);
+    padding:12px 14px; border-radius:9px; cursor:pointer; font-weight:700;
+    transition:.2s transform, .2s background;
+    flex: 1 1 120px; min-width: 80px; max-width: 100%;
+    text-align: center;
+    word-break: break-word;
+}
+.btn:hover{ background:var(--hover); transform: translateY(-1px); }
+
+/* Accordion topics */
+.topic{
+    background:var(--card); border-radius:12px; margin:10px 0; overflow:hidden;
+    border:1px solid rgba(255,255,255,.06);
+}
+.topic summary{
+    list-style:none; cursor:pointer; padding:14px 16px; font-size:1.1rem; font-weight:800;
+    display:flex; align-items:center; justify-content:space-between; user-select:none;
+}
+.topic summary::-webkit-details-marker{ display:none; }
+.topic summary .hint{ font-weight:600; font-size:.9rem; color:var(--muted); margin-left:12px; }
+.topic[open] summary{ background: rgba(0,0,0,.12); }
+.topic .inner{
+    background:var(--card2); padding:16px; border-top:1px solid rgba(255,255,255,.08);
+}
+
+/* Snippets and code blocks */
+.inner, .tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+}
+.snippet {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+.snippet .copy {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index:2;
+    padding:6px 10px;
+    border:none;
+    border-radius:7px;
+    background:rgba(0,0,0,.35);
+    color:var(--text);
+    cursor:pointer;
+    font-weight:700;
+    flex: none; /* don't grow inside snippet */
+}
+.snippet .copy.copied{ background:#2a9d8f; }
+
+pre {
+    width: 100%;
+    overflow-x: auto;     /* horizontal scroll if needed */
+    white-space: pre-wrap; /* wrap long lines */
+    box-sizing: border-box;
+    max-height: 250px;
+}
+pre code {
+    display: block;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Two-column helper on wide screens */
+.grid{
+    display:grid; grid-template-columns:1fr; gap:16px;
+}
+@media (min-width: 880px){
+    .grid{ grid-template-columns: 1fr 1fr; }
+}
+
+.tip{
+    background:rgba(0,0,0,.18); border-left:4px solid var(--accent);
+    padding:10px 12px; border-radius:8px; margin: 10px 0 16px;
+    font-size:.95rem;
+}
+.kbd{
+    background:rgba(0,0,0,.35); padding:2px 6px; border-radius:5px; font-family:inherit;
+    border:1px solid rgba(255,255,255,.15);
+}
+
+#search {
+    display: block;
+    margin: 0 auto 20px auto;
+    padding: 10px;
+    width: 300px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+}
+</style>
+</head>
+<body>
+
+    <div class="tab-bar">
+        <a href="Index.html">Home</a>
+        <a href="CheatSheet.html" class="active">Cheat Sheet</a>
+        <a href="Tools.html">Tools</a>
+        <a href="Support.html">Support</a>
+        <a href="About.html">About</a>
+    </div>
+
+    <div class="content">
+        <h1>UNITY C# FULL CHEAT SHEET</h1>
+        <div class="sub">Click a topic to expand. Use search to filter. Copy buttons grab the exact snippet.</div>
+
+        <div class="tools">
+            <div class="search">
+                <input type="text" id="search" placeholder="Search topics...">
+            </div>
+            <button id="expandAll" class="btn">Expand All</button>
+            <button id="collapseAll" class="btn">Collapse All</button>
+        </div>
+
+        <!-- =================== SECTIONS =================== -->
+
+        <details class="topic" data-tags="structure class mono start update">
+            <summary>Script Structure <span class="hint">lifecycle: Start, Update</span></summary>
+            <div class="inner">
+                <div class="snippet">
+                    <button class="copy">Copy</button>
+<pre><code>using UnityEngine;
+
+public class MyScript : MonoBehaviour
+{
+    void Start()
+    {
+        // Called before the first frame update
+    }
+
+    void Update()
+    {
+        // Called once per frame
+    }
+}</code></pre>
+                </div>
+                <div class="tip">Other lifecycle methods: <span class="kbd">Awake</span>, <span class="kbd">OnEnable</span>, <span class="kbd">FixedUpdate</span>, <span class="kbd">LateUpdate</span>, <span class="kbd">OnDisable</span>, <span class="kbd">OnDestroy</span>.</div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="variables ints floats bool string vector3 fields serializefield const readonly">
+            <summary>Variables <span class="hint">int, float, bool, string, Vector3</span></summary>
+            <div class="inner grid">
+                <div class="snippet">
+                    <button class="copy">Copy</button>
+<pre><code>int health = 100;
+float speed = 5.5f;
+bool isAlive = true;
+string playerName = "GGVR";
+Vector3 position = new Vector3(0f, 1f, 0f);</code></pre>
+                </div>
+                <div class="snippet">
+                    <button class="copy">Copy</button>
+<pre><code>// Useful modifiers
+[SerializeField] private int maxHealth = 100;
+public readonly float gravity = 9.81f;
+public const float PI = 3.14159f;</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="list array collections generic">
+            <summary>Lists / Arrays</summary>
+            <div class="inner grid">
+                <div class="snippet">
+                    <button class="copy">Copy</button>
+<pre><code>using System.Collections.Generic;
+
+string[] names = { "Bob", "Alice" };
+List&lt;int&gt; scores = new List&lt;int&gt;();
+scores.Add(100);
+scores.RemoveAt(0);</code></pre>
+                </div>
+                <div class="snippet">
+                    <button class="copy">Copy</button>
+<pre><code>// Common ops
+bool hasAlice = names.Length &gt; 1 &amp;&amp; names[1] == "Alice";
+bool contains100 = scores.Contains(100);
+scores.ForEach(s =&gt; Debug.Log(s));</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="flow control loop for while if switch">
+            <summary>Loops / Conditions</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>for (int i = 0; i &lt; 5; i++) { /* ... */ }
+while (true) { /* ... */ }
+if (health &lt;= 0) { /* ... */ }
+switch (state) { case 0: break; }</code></pre>
+                </div>
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>// foreach and guard clauses
+foreach (var n in names) { Debug.Log(n); }
+if (speed &lt;= 0f) return; // early exit</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="input keyboard axis new old">
+            <summary>Input (Legacy)</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>if (Input.GetKey(KeyCode.Space)) { /* hold */ }
+if (Input.GetKeyDown(KeyCode.E)) { /* pressed */ }
+float x = Input.GetAxis("Horizontal");</code></pre>
+                </div>
+                <div class="tip">For the new Input System, see the XR/Input section below.</div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="transform movement translate rotate lookat">
+            <summary>Transform / Movement</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>transform.position = new Vector3(0f, 1f, 0f);
+transform.Translate(Vector3.forward * Time.deltaTime);
+transform.Rotate(0f, 90f * Time.deltaTime, 0f);
+transform.LookAt(target.position);</code></pre>
+                </div>
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>// Smooth follow example
+transform.position = Vector3.Lerp(transform.position, target.position, 5f * Time.deltaTime);
+transform.rotation = Quaternion.Slerp(transform.rotation, target.rotation, 5f * Time.deltaTime);</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="vector math magnitude normalized dot cross lerp move towards">
+            <summary>Vector Math</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>float d = Vector3.Distance(a, b);
+Vector3 dir = (b - a).normalized;
+Vector3 p = Vector3.Lerp(a, b, t);
+Vector3 step = Vector3.MoveTowards(a, b, speed * Time.deltaTime);
+float dot = Vector3.Dot(a, b);
+Vector3 cross = Vector3.Cross(a, b);
+float mag = dir.magnitude;
+Vector3 unit = dir.normalized;</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="rigidbody physics addforce velocity">
+            <summary>Rigidbody / Physics</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>Rigidbody rb = GetComponent&lt;Rigidbody&gt;();
+rb.AddForce(Vector3.up * 10f, ForceMode.Impulse);
+rb.velocity = new Vector3(0f, 5f, 0f);</code></pre>
+                </div>
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>// Movement in FixedUpdate
+void FixedUpdate()
+{
+    rb.MovePosition(rb.position + transform.forward * speed * Time.fixedDeltaTime);
+}</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="collision trigger oncollision ontrigger">
+            <summary>Collision / Trigger</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>void OnCollisionEnter(Collision other)
+{
+    Debug.Log("Hit " + other.gameObject.name);
+}
+
+void OnTriggerEnter(Collider other)
+{
+    Debug.Log("Entered " + other.name);
+}</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="raycast hit layermask">
+            <summary>Raycasting</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>RaycastHit hit;
+if (Physics.Raycast(transform.position, transform.forward, out hit, 100f))
+{
+    Debug.Log("Hit: " + hit.collider.name);
+}</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="instantiate destroy pooling">
+            <summary>Instantiate / Destroy</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>Instantiate(prefab, position, rotation);
+Destroy(gameObject);
+Destroy(gameObject, 2f);</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="gameobject components find getcomponent transform findwithtag">
+            <summary>GameObject / Components</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>gameObject.SetActive(false);
+GameObject.Find("Player");
+GameObject.FindWithTag("Enemy");
+GetComponent&lt;Rigidbody&gt;();
+transform.Find("Head");</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="tags layers layermask">
+            <summary>Tags / Layers</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>if (other.CompareTag("Enemy")) { /* ... */ }
+gameObject.layer = LayerMask.NameToLayer("Player");</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="scene management scenemanager loadscene buildindex">
+            <summary>Scene Management</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>using UnityEngine.SceneManagement;
+
+SceneManager.LoadScene("SceneName");
+SceneManager.LoadScene(1);
+SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="coroutine ienumerator waitforseconds">
+            <summary>Coroutines</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>StartCoroutine(MyTimer());
+
+IEnumerator MyTimer()
+{
+    yield return new WaitForSeconds(2f);
+    Debug.Log("Timer done");
+}</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="playerprefs save load delete">
+            <summary>PlayerPrefs</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>PlayerPrefs.SetInt("Score", 100);
+int score = PlayerPrefs.GetInt("Score", 0);
+PlayerPrefs.DeleteAll();</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="debug log drawray">
+            <summary>Debugging</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>Debug.Log("Hello");
+Debug.DrawRay(transform.position, transform.forward * 5f, Color.red);</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="animation animator trigger bool play">
+            <summary>Animation (Animator)</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>Animator anim = GetComponent&lt;Animator&gt;();
+anim.SetTrigger("Jump");
+anim.SetBool("IsRunning", true);
+anim.Play("RunAnimation");</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="ui unityengine.ui text button slider">
+            <summary>UI (UnityEngine.UI)</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>using UnityEngine.UI;
+
+Text myText = GetComponent&lt;Text&gt;();
+myText.text = "Hello World";
+
+Button myButton = GetComponent&lt;Button&gt;();
+myButton.onClick.AddListener(MyFunction);
+
+Slider mySlider = GetComponent&lt;Slider&gt;();
+float value = mySlider.value;</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="tmp textmeshpro inputfield font style richtext">
+            <summary>TextMeshPro (TMP)</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>using TMPro; // Required
+
+TextMeshProUGUI tmp = GetComponent&lt;TextMeshProUGUI&gt;();   // display text
+TMP_InputField input = GetComponent&lt;TMP_InputField&gt;();    // input field
+
+tmp.text = "Hello World";                    // Set text
+string currentText = tmp.text;               // Get text
+tmp.fontSize = 36f;
+tmp.color = Color.cyan;
+tmp.alignment = TextAlignmentOptions.Center; // Style
+
+// Rich text
+tmp.text = "&lt;b&gt;Bold&lt;/b&gt; &lt;i&gt;Italic&lt;/i&gt; &lt;color=red&gt;Red&lt;/color&gt;";
+
+// Placeholder text
+input.placeholder.GetComponent&lt;TMP_Text&gt;().text = "Enter name...";
+
+// Events
+input.onValueChanged.AddListener(val =&gt; Debug.Log("Changed: " + val));
+input.onSubmit.AddListener(val =&gt; Debug.Log("Submitted: " + val));
+
+// Parse &amp; save
+if (int.TryParse(input.text, out int i)) { PlayerPrefs.SetInt("SavedInt", i); }
+if (float.TryParse(input.text, out float f)) { PlayerPrefs.SetFloat("SavedFloat", f); }
+int loadedInt = PlayerPrefs.GetInt("SavedInt", 0);
+float loadedFloat = PlayerPrefs.GetFloat("SavedFloat", 0f);
+tmp.text = loadedInt.ToString();
+
+// Misc
+tmp.enabled = false;                    // Hide TMP
+tmp.text = $"Score: {score}";           // Interpolation
+tmp.text = score.ToString("F1");        // 1 decimal
+tmp.text = tmp.text.ToUpper();          // UPPER
+tmp.text = tmp.text.Replace("Player", "You"); // Replace
+
+TMP_FontAsset font = Resources.Load&lt;TMP_FontAsset&gt;("Fonts/MyFont");
+tmp.font = font;
+
+tmp.text += "\nNew Line";</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="audio audiosource play oneshot stop">
+            <summary>Audio</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>AudioSource audio = GetComponent&lt;AudioSource&gt;();
+audio.Play();
+audio.Stop();
+audio.PlayOneShot(clip);</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="enums states gamestate">
+            <summary>Enums</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>public enum GameState { Start, Playing, GameOver }
+public GameState currentState = GameState.Playing;</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="material renderer color">
+            <summary>Material / Color</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>Renderer rend = GetComponent&lt;Renderer&gt;();
+rend.material.color = Color.red;
+rend.material = newMaterial;</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="parenting hierarchy localposition">
+            <summary>Parenting</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>child.transform.SetParent(parentTransform);
+child.transform.localPosition = Vector3.zero;</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="quaternion look rotation slerp">
+            <summary>Look Rotation</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>Quaternion lookRotation =
+    Quaternion.LookRotation(target.position - transform.position);
+
+transform.rotation = Quaternion.Slerp(
+    transform.rotation, lookRotation, Time.deltaTime * 5f);</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="invoke cancelinvoke timers">
+            <summary>Invoke</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>Invoke("MyFunction", 2f);
+CancelInvoke("MyFunction");</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="time deltatime timescale">
+            <summary>Time</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>float dt = Time.deltaTime;
+float now = Time.time;
+Time.timeScale = 0f; // Pause</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="layer masks raycast getmask">
+            <summary>Layer Masks</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>int layerMask = LayerMask.GetMask("Player");
+Physics.Raycast(pos, dir, out hit, 100f, layerMask);</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="mouse input screen to world">
+            <summary>Mouse Input</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>Vector3 mouse = Input.mousePosition;
+Vector3 world = Camera.main.ScreenToWorldPoint(
+    new Vector3(mouse.x, mouse.y, 10f));</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="distance check proximity">
+            <summary>Distance Check</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>if (Vector3.Distance(transform.position, target.position) &lt; 5f)
+{
+    // In range
+}</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="clamp mathf min max">
+            <summary>Clamp</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>value = Mathf.Clamp(value, 0f, 100f);
+angle = Mathf.Clamp(angle, -30f, 30f);</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="mathf lerp abs sin round">
+            <summary>Mathf</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>float lerp = Mathf.Lerp(a, b, t);
+float abs = Mathf.Abs(value);
+float wave = Mathf.Sin(Time.time);
+float rounded = Mathf.Round(value);</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="destroy objects by tag loop findgameobjectswithtag">
+            <summary>Destroy Objects by Tag</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+foreach (GameObject enemy in enemies)
+    Destroy(enemy);</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="unityevent events inspector">
+            <summary>UnityEvent</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>using UnityEngine.Events;
+
+public UnityEvent onPlayerDeath;
+
+void Die()
+{
+    onPlayerDeath?.Invoke();
+}</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="bool toggle not operator">
+            <summary>Bool Toggle</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>isOn = !isOn;</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <!-- ======= PHOTON PUN ======= -->
+        <details class="topic" data-tags="photon pun connect room instantiate nickname callbacks serialization">
+            <summary>Photon PUN Basics / Sync</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>using Photon.Pun;
+using Photon.Realtime;
+using UnityEngine;
+
+public class NetBoot : MonoBehaviourPunCallbacks
+{
+    void Start()
+    {
+        PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.NickName = "Player1";
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        PhotonNetwork.JoinOrCreateRoom("RoomName",
+            new RoomOptions { MaxPlayers = 8 }, TypedLobby.Default);
+    }
+
+    public override void OnJoinedRoom()
+    {
+        Debug.Log("Joined Room");
+        PhotonNetwork.Instantiate("PlayerPrefab", Vector3.zero, Quaternion.identity);
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        Debug.Log("Player joined: " + newPlayer.NickName);
+    }
+}</code></pre>
+                </div>
+
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>public class NetworkPlayer : MonoBehaviourPun, IPunObservable
+{
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
+        }
+        else
+        {
+            transform.position = (Vector3)stream.ReceiveNext();
+            transform.rotation = (Quaternion)stream.ReceiveNext();
+        }
+    }
+}</code></pre>
+                </div>
+
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>// Player list
+foreach (var player in PhotonNetwork.PlayerList)
+{
+    Debug.Log(player.NickName);
+}
+
+// Leave room
+PhotonNetwork.LeaveRoom();</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <!-- ======= XR / INPUT ======= -->
+        <details class="topic" data-tags="xr interaction toolkit input action property trigger vr device hand haptics teleporter">
+            <summary>XR Interaction Toolkit &amp; Input</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>// New Input System (package required)
+using UnityEngine.InputSystem;
+
+public InputActionProperty triggerAction;
+
+void Update()
+{
+    if (triggerAction.action.ReadValue&lt;float&gt;() &gt; 0.1f)
+        Debug.Log("Trigger pressed");
+}</code></pre>
+                </div>
+
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>// Legacy XR input
+using UnityEngine.XR;
+
+InputDevice rightHand = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+rightHand.TryGetFeatureValue(CommonUsages.triggerButton, out bool triggerPressed);</code></pre>
+                </div>
+
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>// Grab events (XR Interaction Toolkit)
+using UnityEngine.XR.Interaction.Toolkit;
+
+public XRBaseInteractable grab;
+
+void Awake()
+{
+    grab.selectEntered.AddListener(OnGrab);
+    grab.selectExited.AddListener(OnRelease);
+}
+
+void OnGrab(SelectEnterEventArgs args) { /* ... */ }
+void OnRelease(SelectExitEventArgs args) { /* ... */ }</code></pre>
+                </div>
+
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>// Teleportation
+using UnityEngine.XR.Interaction.Toolkit;
+
+public TeleportationProvider teleportationProvider;
+public Vector3 teleportPos;
+
+void Teleport()
+{
+    var request = new TeleportationRequest
+    {
+        destinationPosition = teleportPos
+    };
+    teleportationProvider.QueueTeleportRequest(request);
+}</code></pre>
+                </div>
+
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>// Head / camera
+Vector3 headPos = Camera.main.transform.position;
+Vector3 headForward = Camera.main.transform.forward;
+
+// Head-relative move
+Vector3 direction = new Vector3(headForward.x, 0f, headForward.z).normalized;
+transform.position += direction * speed * Time.deltaTime;
+
+// Snap turn
+transform.Rotate(0f, 45f, 0f);
+
+// Throwing from hand velocity
+Rigidbody rb = GetComponent&lt;Rigidbody&gt;();
+var interactorRb = interactor.GetComponent&lt;Rigidbody&gt;();
+rb.velocity = interactorRb.velocity;
+rb.angularVelocity = interactorRb.angularVelocity;
+
+// Hand animator
+handAnimator.SetFloat("Grip", gripAction.action.ReadValue&lt;float&gt;());
+
+// Haptics (XR Controller)
+controller.SendHapticImpulse(0.5f, 0.2f);</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <!-- ======= PLAYFAB ======= -->
+        <details class="topic" data-tags="playfab login customid user data update">
+            <summary>PlayFab Basics</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>using PlayFab;
+using PlayFab.ClientModels;
+using UnityEngine;
+using System.Collections.Generic;
+
+void Login()
+{
+    var request = new LoginWithCustomIDRequest { CustomId = "Player123", CreateAccount = true };
+    PlayFabClientAPI.LoginWithCustomID(request, OnLoginSuccess, OnLoginFailure);
+}
+
+void OnLoginSuccess(LoginResult result)
+{
+    Debug.Log("PlayFab login successful!");
+}
+
+void OnLoginFailure(PlayFabError error)
+{
+    Debug.LogError("PlayFab login failed: " + error.GenerateErrorReport());
+}
+
+void UpdatePlayerData(string key, string value)
+{
+    var request = new UpdateUserDataRequest
+    {
+        Data = new Dictionary&lt;string, string&gt; { { key, value } }
+    };
+    PlayFabClientAPI.UpdateUserData(request, OnDataSend, OnDataError);
+}
+
+void OnDataSend(UpdateUserDataResult result) { Debug.Log("Data updated!"); }
+void OnDataError(PlayFabError error) { Debug.LogError(error.GenerateErrorReport()); }</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <!-- ======= SCRIPTABLE OBJECTS & EDITOR ======= -->
+        <details class="topic" data-tags="scriptableobject createassetmenu item inventory">
+            <summary>Scriptable Objects</summary>
+            <div class="inner grid">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>[CreateAssetMenu(fileName = "NewItem", menuName = "Inventory/Item")]
+public class Item : ScriptableObject
+{
+    public string itemName;
+    public Sprite icon;
+    public int itemID;
+}</code></pre>
+                </div>
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>public Item myItem;
+void Start()
+{
+    Debug.Log(myItem.itemName);
+}</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="editor custom inspector">
+            <summary>Custom Editor (Inspector)</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>using UnityEditor;
+using UnityEngine;
+
+[CustomEditor(typeof(MyScript))]
+public class MyScriptEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        MyScript myScript = (MyScript)target;
+        if (GUILayout.Button("Reset Health"))
+        {
+            myScript.health = 100;
+        }
+    }
+}</code></pre>
+                </div>
+                <div class="tip">Place editor scripts inside an <span class="kbd">Editor</span> folder.</div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="editor window ui toolkit editorwindow">
+            <summary>Custom Editor Window</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>using UnityEditor;
+using UnityEngine;
+
+public class MyCustomWindow : EditorWindow
+{
+    string playerName = "GGVR";
+
+    [MenuItem("Window/My Custom Window")]
+    public static void ShowWindow()
+    {
+        GetWindow&lt;MyCustomWindow&gt;("Custom Window");
+    }
+
+    void OnGUI()
+    {
+        GUILayout.Label("Player Settings", EditorStyles.boldLabel);
+        playerName = EditorGUILayout.TextField("Player Name", playerName);
+
+        if (GUILayout.Button("Print Player Name"))
+        {
+            Debug.Log("Player Name: " + playerName);
+        }
+    }
+}</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <!-- ======= EASY INPUTS (YOUR LIB) ======= -->
+        <details class="topic" data-tags="easyinputs grip trigger primary secondary thumbstick menu">
+            <summary>Easy Inputs – Quick Map</summary>
+            <div class="inner">
+                <pre><code>GetGripButtonDown(EasyHand easyHand)          = Grip
+GetTriggerButtonDown(EasyHand easyHand)       = Trigger
+GetPrimaryButtonDown(EasyHand easyHand)       = A &amp; X buttons
+GetSecondaryButtonDown(EasyHand easyHand)     = B &amp; Y buttons
+GetThumbStickButtonDown(EasyHand easyHand)    = Thumbstick
+GetMenuButtonDown(EasyHand easyHand)          = 3-line menu</code></pre>
+            </div>
+        </details>
+
+        <!-- ======= NICE EXTRAS ======= -->
+        <details class="topic" data-tags="gizmos debug draw editor">
+            <summary>Gizmos (Editor-only visuals)</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>void OnDrawGizmos()
+{
+    Gizmos.color = Color.cyan;
+    Gizmos.DrawWireSphere(transform.position, 1f);
+}</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="navmesh agent ai pathfinding">
+            <summary>NavMesh Agent (Quick)</summary>
+            <div class="inner">
+                <div class="snippet"><button class="copy">Copy</button>
+<pre><code>using UnityEngine.AI;
+
+NavMeshAgent agent;
+
+void Awake() { agent = GetComponent&lt;NavMeshAgent&gt;(); }
+
+void Update()
+{
+    agent.destination = target.position;
+}</code></pre>
+                </div>
+            </div>
+        </details>
+
+        <details class="topic" data-tags="script execution order lifecycle awake start fixed late">
+            <summary>Script Execution Order Tips</summary>
+            <div class="inner">
+                <pre><code>Awake()       // Initialize references &amp; state
+OnEnable()    // Subscribe events
+Start()       // Safe to access other components' initialized state
+Update()      // Frame-based logic &amp; input
+FixedUpdate() // Physics; consistent timestep
+LateUpdate()  // Camera follow; runs after Update</code></pre>
+            </div>
+        </details>
+
+        <!-- End content -->
+    </div>
+
+<script>
+/* ---------- Copy buttons ---------- */
+document.querySelectorAll('.copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const code = btn.nextElementSibling.innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            btn.classList.add('copied');
+            btn.textContent = 'Copied!';
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.textContent = 'Copy';
+            }, 900);
+        });
+    });
+});
+
+/* ---------- Expand/Collapse All ---------- */
+const allTopics = Array.from(document.querySelectorAll('details.topic'));
+document.getElementById('expandAll').addEventListener('click', () => {
+    allTopics.forEach(d => d.open = true);
+});
+document.getElementById('collapseAll').addEventListener('click', () => {
+    allTopics.forEach(d => d.open = false);
+});
+
+/* ---------- Search Filter ---------- */
+const searchInput = document.getElementById('search');
+searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    allTopics.forEach(d => {
+        const title = d.querySelector('summary').innerText.toLowerCase();
+        const tags  = (d.dataset.tags || '').toLowerCase();
+        const body  = d.innerText.toLowerCase();
+        const hit = title.includes(q) || tags.includes(q) || body.includes(q);
+        d.style.display = hit ? '' : 'none';
+    });
+});
+</script>
+
+</body>
+</html>
